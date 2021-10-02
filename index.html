@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+        integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="notebook">
+        <div class="uline"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="l1"></div>
+        <div class="l2"></div>
+        <div class="l3"></div>
+        <h1 id="scr"></h1>
+        <h2 id="k"></h2>
+        <h3 class="til"></h3>
+    </div>
+    <div class="pm">
+        <button id="p" onclick="b1c()">+</button>
+        <button id="m" onclick="b2c()">-</button>
+        <button onclick="downloadtable()">></button>
+        <button onclick="addtotext()">A</button>
+        <button onclick="deltotext()">D</button>
+    </div>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.js"></script>
+    <script>
+        $(function () {
+                $(".pm").draggable({
+                    drag: function () {
+                        var offset = $(this).offset();
+                    }
+                });
+            });
+    </script>
+    <script>
+        var now = 0;
+        var scr = document.querySelector('#scr'), page = document.getElementById('k');
+        var tit = document.querySelector('.til');
+        var text = [];
+        
+        function addtotext(){
+            text.push([prompt('Title'), prompt('Page NO'), prompt('Text')]);
+            up();
+        }
+        
+
+        function downloadtable() {
+
+                var node = document.querySelector('.notebook');
+
+                domtoimage.toPng(node)
+                    .then(function (dataUrl) {
+                        var img = new Image();
+                        img.src = dataUrl;
+                        downloadURI(dataUrl, "NoteBookPage.png")
+                    })
+                    .catch(function (error) {
+                        console.error('oops, something went wrong', error);
+                    });
+
+            }
+            function downloadURI(uri, name) {
+                    var link = document.createElement("a");
+                    link.download = name;
+                    link.href = uri;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    delete link;
+                }
+        function up(){
+            if (now > text.length - 1){
+                now = 0;
+            }
+            else{
+
+            }
+            scr.innerHTML = text[now][2].replace(' ', '&nbsp;');
+            tit.innerHTML = text[now][0];
+            page.innerHTML = text[now][1];
+        }
+        function b1c(){
+            now += 1;
+            up();
+        }
+         function b2c() {
+                now -= 1;
+                if (now < 0){
+                    now = text.length - 1;
+                }
+                up();
+            }
+    </script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            background: #222;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        ::-webkit-scrollbar{
+            width: 0;
+        }
+        .notebook{
+            background: #fff;
+            width: 500px;
+            height: 600px;
+            position: absolute;
+        }
+        .notebook .line{
+            width: 100%;
+            height: 23px;
+            margin: 0.25;
+            border-bottom: 1px solid #000;
+            font-weight: 0.1;
+            font-family: cursive;
+        }
+        .notebook .uline{
+            width: 100%;
+            height: 80px;
+            border-bottom: 1px solid rgba(255, 0, 0, 0.555);
+            margin: 0.25px;
+        }
+        .notebook .l1{
+            position: absolute;
+            width: 1px;
+            background: rgba(255, 0, 0, 0.555);
+            top: 0;
+            height: 100%;
+            left: 9.2%;
+            font-weight: 1;
+        }
+        .notebook .l2{
+            position: absolute;
+            width: 1px;
+            background: rgba(255, 0, 0, 0.555);
+            top: 0;
+            height: 100%;
+            left: 10%;
+            font-weight: 1;
+        }
+        #lnb{
+            left: 65%;
+        }
+        .l3{
+            width: 100%;
+            height: 1px;
+            background: rgba(255, 0, 0, 0.555);
+            position: absolute;
+            top: 76px;
+            left: 0;
+        }
+        .notebook h1{
+            color: rgb(0, 81, 255);
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: -2px;
+            font-size: 2.45ex;
+            width: 80%;
+            position: absolute;
+            top: 85px;
+            font-weight: 1;
+            font-family: cursive;
+            left: 10%;
+        }
+        .pm{
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            width: 300px;
+            height: 80px;
+            background: #fff;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pm button{
+            border: 0;
+            background: #222;
+            color: #fff;
+            padding: 10px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4ex;
+            width: 60px;
+            margin: 10px;
+        }
+        .pm button:active{
+            background: yellowgreen;
+        }
+        .notebook h2{
+            position: absolute;
+            top: 8.5%;
+            left: 2%;
+            font-family: 'Courier New', Courier, monospace;
+            color: rgb(0, 81, 255);
+            font-weight: 1;
+        }
+        .notebook h3{
+            position: absolute;
+            top: 7.6%;
+            left: 10%;
+            font-size: 4ex;
+            font-family: cursive;
+            letter-spacing: -2px;
+            color: rgb(0, 110, 255);
+            font-weight: 100;
+            letter-spacing: -3px;
+        }
+    </style>
+</body>
+</html>
